@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AWSServerlessReact", "AWSServerlessReact\AWSServerlessReact.csproj", "{6FAFB4C9-8496-4AF0-90B5-4AE8522FE0C4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AWSServerlessReact.Tests", "AWSServerlessReact.Tests\AWSServerlessReact.Tests.csproj", "{C64DE75B-FBD3-4104-9725-90178EAB72A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FAFB4C9-8496-4AF0-90B5-4AE8522FE0C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FAFB4C9-8496-4AF0-90B5-4AE8522FE0C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FAFB4C9-8496-4AF0-90B5-4AE8522FE0C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FAFB4C9-8496-4AF0-90B5-4AE8522FE0C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C64DE75B-FBD3-4104-9725-90178EAB72A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C64DE75B-FBD3-4104-9725-90178EAB72A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C64DE75B-FBD3-4104-9725-90178EAB72A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C64DE75B-FBD3-4104-9725-90178EAB72A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08B46F59-5FCA-415E-AD1B-E9C39A82FB13}
+	EndGlobalSection
+EndGlobal

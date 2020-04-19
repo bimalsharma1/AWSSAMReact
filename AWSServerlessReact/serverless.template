@@ -1,0 +1,340 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "AWS Serverless API that exposes the add, remove and get operations for a LPging platform using Amazon DynamoDB.",
+  "Globals": {
+    "Api": {
+        "Cors": {
+        "AllowMethods": "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'",
+        "AllowHeaders": "'Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers'",
+        "AllowOrigin": "'*'"
+      }
+    }
+  },
+  "Parameters": {
+    "ShouldCreateTable": {
+      "Type": "String",
+      "AllowedValues": [
+        "true",
+        "false"
+      ],
+      "Description": "If true then the DynamoDB LPging table will be created with the CloudFormation stack."
+    },
+    "LPTableName": {
+      "Type": "String",
+      "Description": "Name of DynamoDB table used to store the LP post. If left blank a new table will be created.",
+      "MinLength": "0"
+    },
+    "LPSummaryTableName": {
+      "Type": "String",
+      "Description": "Name of DynamoDB table used to store the LP summary post. If left blank a new table will be created.",
+      "MinLength": "0"
+    },
+    "ReadCapacity": {
+      "Type": "Number",
+      "Description": "Read capacity for the DynamoDB LP table.",
+      "Default": "3",
+      "MinValue": 1
+    },
+    "WriteCapacity": {
+      "Type": "Number",
+      "Description": "Write capacity for the DynamoDB LP table.",
+      "Default": "3",
+      "MinValue": 1
+    }
+  },
+  "Conditions": {
+    "CreateLPTable": {
+      "Fn::Equals": [
+        {
+          "Ref": "ShouldCreateTable"
+        },
+        "true"
+      ]
+    },
+    "CreateLPSummaryTable": {
+      "Fn::Equals": [
+        {
+          "Ref": "ShouldCreateTable"
+        },
+        "true"
+      ]
+    },
+    "TableNameGenerated": {
+      "Fn::Equals": [
+        {
+          "Ref": "LPTableName"
+        },
+        ""
+      ]
+    },
+    "TableNameSummaryGenerated": {
+      "Fn::Equals": [
+        {
+          "Ref": "LPSummaryTableName"
+        },
+        ""
+      ]
+    }
+  },
+  "Resources": {
+    "GetLPs": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "AWSServerlessReact::AWSServerlessReact.Functions::GetLPsAsync",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Description": "Function to get a list of lps",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [
+          "AWSLambdaFullAccess"
+        ],
+        "Environment": {
+          "Variables": {
+            "LPTable": {
+              "Fn::If": [
+                "CreateLPTable",
+                {
+                  "Ref": "LPTable"
+                },
+                {
+                  "Ref": "LPTableName"
+                }
+              ]
+            }
+          }
+        },
+        "Events": {
+          "PutResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "AddLPs": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "AWSServerlessReact::AWSServerlessReact.Functions::AddLPsAsync",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Description": "Function to add a LPs",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [
+          "AWSLambdaFullAccess"
+        ],
+        "Environment": {
+          "Variables": {
+            "LPTable": {
+              "Fn::If": [
+                "CreateLPTable",
+                {
+                  "Ref": "LPTable"
+                },
+                {
+                  "Ref": "LPTableName"
+                }
+              ]
+            }
+          }
+        },
+        "Events": {
+          "PutResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/",
+              "Method": "POST"
+            }
+          }
+        }
+      }
+    },
+    "GetLPSummary": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "AWSServerlessReact::AWSServerlessReact.Functions::GetLPSummaryAsync",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Description": "Function to get a list of lps",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [
+          "AWSLambdaFullAccess"
+        ],
+        "Environment": {
+          "Variables": {
+            "LPTable": {
+              "Fn::If": [
+                "CreateLPSummaryTable",
+                {
+                  "Ref": "LPSummaryTable"
+                },
+                {
+                  "Ref": "LPSummaryTableName"
+                }
+              ]
+            }
+          }
+        },
+        "Events": {
+          "PutResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/summary",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "AddLPSummary": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "AWSServerlessReact::AWSServerlessReact.Functions::AddLPSummaryAsync",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Description": "Function to getLP summary",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [
+          "AWSLambdaFullAccess"
+        ],
+        "Environment": {
+          "Variables": {
+            "LPTable": {
+              "Fn::If": [
+                "CreateLPSummaryTable",
+                {
+                  "Ref": "LPSummaryTable"
+                },
+                {
+                  "Ref": "LPSummaryTableName"
+                }
+              ]
+            }
+          }
+        },
+        "Events": {
+          "PutResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/summary",
+              "Method": "POST"
+            }
+          }
+        }
+      }
+    },
+    "LPTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Condition": "CreateLPTable",
+      "Properties": {
+        "TableName": {
+          "Fn::If": [
+            "TableNameGenerated",
+            {
+              "Ref": "AWS::NoValue"
+            },
+            {
+              "Ref": "LPTableName"
+            }
+          ]
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "Id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "Id",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": {
+            "Ref": "ReadCapacity"
+          },
+          "WriteCapacityUnits": {
+            "Ref": "WriteCapacity"
+          }
+        }
+      }
+    },
+    "LPSummaryTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Condition": "CreateLPSummaryTable",
+      "Properties": {
+        "TableName": {
+          "Fn::If": [
+            "TableNameSummaryGenerated",
+            {
+              "Ref": "AWS::NoValue"
+            },
+            {
+              "Ref": "LPSummaryTableName"
+            }
+          ]
+        },
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "FileName",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "FileName",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": {
+            "Ref": "ReadCapacity"
+          },
+          "WriteCapacityUnits": {
+            "Ref": "WriteCapacity"
+          }
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "LPTable": {
+      "Value": {
+        "Fn::If": [
+          "CreateLPTable",
+          {
+            "Ref": "LPTable"
+          },
+          {
+            "Ref": "LPTableName"
+          }
+        ]
+      }
+    },
+    "LPSummaryTable": {
+      "Value": {
+        "Fn::If": [
+          "CreateLPSummaryTable",
+          {
+            "Ref": "LPSummaryTable"
+          },
+          {
+            "Ref": "LPSummaryTableName"
+          }
+        ]
+      }
+    }
+  }
+}

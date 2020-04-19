@@ -3,3 +3,10 @@
 ################################################################################
 
 /AWSServerlessReact.Tests/bin/Debug/netcoreapp3.1
+/AWSServerlessReact.Tests/obj/Debug/netcoreapp3.1
+/AWSServerlessReact.Tests/obj
+/AWSServerlessReact/obj/Release
+/AWSServerlessReact/obj
+/AWSServerlessReact/bin
+/.vs/AWSServerlessReact
+/AWSServerlessReact/Properties
